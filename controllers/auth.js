@@ -1,10 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const catchError = require("../helpers/catchError");
 
+const catchError = require("../helpers/catchError");
 const config = require("../config");
 const validateResult = require("../helpers/validateResult");
-const sendError = require("../helpers/sendError");
 const { connectDb } = require("../database/db");
 
 module.exports.register = catchError(async (req, res, next) => {
