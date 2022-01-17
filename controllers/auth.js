@@ -75,7 +75,7 @@ module.exports.login = catchError(async (req, res, next) => {
       username: user[0].username,
       profilePic: user[0].profilePic,
       id: user[0].id,
-      emial: user[0].email,
+      email: user[0].email,
     };
     res.status(200).json({ transformedUser, jwtToken });
 });
@@ -86,9 +86,7 @@ module.exports.getAccount = catchError(async (req, res, next) => {
     const user = await conn.query(
       `SELECT id, username, email, profilePic FROM users WHERE id = ${userId}`
     );
-    res.status(200).json({
-      user,
-    });
+    res.status(200).json(user);
 });
 
 module.exports.editAccount = catchError(async (req, res, next) => {
@@ -122,15 +120,15 @@ module.exports.editAccount = catchError(async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-    const img = req.file ? req.file.path.replace("\\", "/") : null;
+    const img = req.file ? req.file.path.replace("\\", "/") : user[0].profilePic;
     const saltRounds = 10;
     const hp = await bcrypt.hash(password, saltRounds);
     const results = await conn.query(
       `UPDATE users SET username="${username}", email = "${email}", profilePic = "${img}", password = "${hp}" WHERE id = ${userId}`
     );
     res.status(200).json({
-      message: "Los datos del usuario se hana ctualizado correctamente",
-      results,
+      message: "Los datos del usuario se han actualizado correctamente",
+      user: {usename, email, img},
     });
 });
 
@@ -150,6 +148,6 @@ module.exports.deleteUser = catchError(async (req, res, next) => {
     const results = await conn.query(`DELETE FROM users WHERE id = ${userId}`);
     res.status(200).json({
       message: "El usuario se ha eliminado de forma correcta",
-      results,
+      user,
     });
 });
