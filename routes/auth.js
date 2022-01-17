@@ -49,17 +49,7 @@ router.put(
       .isLength({ min: 6 })
       .isAlphanumeric()
       .trim()
-      .withMessage("Se debe de ingresar una contraseña válida"),
-    body("confirmPassword")
-      .trim()
-      .custom((value, { req }) => {
-        if (value !== req.body.password) {
-          throw new Error(
-            "La contraseña no coincide con la contraseña ingresada"
-          );
-        }
-        return true;
-      }),
+      .withMessage("Se debe de ingresar una contraseña válida")
   ],
   uploadImg.single("img"),
   authRoutes.editAccount
